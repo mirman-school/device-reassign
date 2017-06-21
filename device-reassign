@@ -1,0 +1,79 @@
+#!/usr/bin/ruby
+require "pathname"
+require "fileutils"
+require "shellwords"
+
+USERS_DIR = Pathname.new("/Users")
+STUDENT_RE = /\.+20\d{2}/
+
+new_username = ARGV.shift
+new_fullname = ARGV.shift
+new_password = ARGV.shift
+
+puts new_password
+found = Array.new
+
+USERS_DIR.each_child do |d| 
+	if STUDENT_RE =~ d.basename.to_s
+		found.push d
+	end
+end
+
+puts "Found the following students home folders:"
+puts found
+print "Delete users (y/n)? "
+
+confirm = gets.chomp!
+
+if confirm.downcase == "y"
+	puts "Okay!"
+	found.each do |u|
+		user = u.basename
+		puts "Deleting user #{user}"
+		`dscl . -delete /Users/#{user}`
+		puts "Deleting home folder for #{user}"
+		u.rmtree
+	end
+else 
+	puts "Then why bother running me?"
+	exit 
+end
+
+if !new_username
+	print "Enter a new username/hostname: "
+	new_username = gets.chomp!
+end
+
+if !new_fullname
+	print "Enter a new full name: "
+	new_fullname = gets.chomp!
+end
+
+if !new_password
+	print "Enter a new password: "
+	new_password = gets.chomp!
+end
+
+puts "Making new user #{new_username}, aka #{new_fullname}, with password #{new_password}"
+
+print "Good to go (y/n)?"
+confirm = gets.chomp!
+
+if confirm.downcase == "y"
+	`dscl . create /Users/#{new_username}`
+	`dscl . create /Users/#{new_username} UserShell /bin/bash`
+	`dscl . create /Users/#{new_username} RealName "#{new_fullname}"`
+	`dscl . create /Users/#{new_username} UniqueID 503`
+	`dscl . create /Users/#{new_username} PrimaryGroupID 1000`
+	`dscl . create /Users/#{new_username} NFSHomeDirectory /Users/#{new_username}`
+	`dscl . passwd /Users/#{new_username} #{new_password}`
+	`dscl . append /Groups/_lpadmin GroupMembership #{new_username}`
+	`scutil --set HostName #{new_username}`
+	`scutil --set LocalHostName #{new_username}`
+	`scutil --set ComputerName #{new_username}`
+	puts "Device reprovisioned; update in all inventories"
+	exit
+else 
+	puts "Fine, be that way"
+	exit 
+end

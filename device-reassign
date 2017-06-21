@@ -32,7 +32,7 @@ if confirm.downcase == "y"
 		puts "Deleting user #{user}"
 		`dscl . -delete /Users/#{user}`
 		puts "Deleting home folder for #{user}"
-		u.rmtree
+		Fileutils.rm_rf u
 	end
 else 
 	puts "Then why bother running me?"

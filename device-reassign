@@ -63,7 +63,7 @@ if confirm.downcase == "y"
 	`dscl . create /Users/#{new_username}`
 	`dscl . create /Users/#{new_username} UserShell /bin/bash`
 	`dscl . create /Users/#{new_username} RealName "#{new_fullname}"`
-	`dscl . create /Users/#{new_username} UniqueID 503`
+	`dscl . create /Users/#{new_username} UniqueID 800`
 	`dscl . create /Users/#{new_username} PrimaryGroupID 1000`
 	`dscl . create /Users/#{new_username} NFSHomeDirectory /Users/#{new_username}`
 	`dscl . passwd /Users/#{new_username} #{new_password}`

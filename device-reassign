@@ -19,7 +19,6 @@ if new_username == nil || new_fullname == nil || new_password == nil
 	exit 
 end
 
-puts new_password
 found = Array.new
 
 USERS_DIR.each_child do |d| 
@@ -46,21 +45,6 @@ if confirm.downcase == "y"
 else 
 	puts "Then why bother running me?"
 	exit 
-end
-
-if !new_username
-	print "Enter a new username/hostname: "
-	new_username = gets.chomp!
-end
-
-if !new_fullname
-	print "Enter a new full name: "
-	new_fullname = gets.chomp!
-end
-
-if !new_password
-	print "Enter a new password: "
-	new_password = gets.chomp!
 end
 
 puts "Making new user #{new_username}, aka #{new_fullname}, with password #{new_password}"

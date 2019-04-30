@@ -10,6 +10,15 @@ new_username = ARGV.shift
 new_fullname = ARGV.shift
 new_password = ARGV.shift
 
+def print_usage()
+	puts "Usage:\n device-reassign [NEW_USER] [FULLNAME] [PASSWORD]"
+end
+
+if new_username == nil || new_fullname == nil || new_password == nil
+	print_usage()
+	exit 
+end
+
 puts new_password
 found = Array.new
 

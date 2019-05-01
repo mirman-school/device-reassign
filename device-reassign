@@ -4,7 +4,7 @@ require "fileutils"
 require "shellwords"
 
 USERS_DIR = Pathname.new("/Users")
-STUDENT_RE = /20\d{2}/
+IGNORE_USERS = ["electron","Shared"]
 
 new_username = ARGV.shift
 new_fullname = ARGV.shift
@@ -19,23 +19,22 @@ if new_username == nil || new_fullname == nil || new_password == nil
 	exit 
 end
 
-found = Array.new
-
-USERS_DIR.each_child do |d| 
-	if STUDENT_RE =~ d.basename.to_s
-		found.push d
-	end
+users = Array.new
+USERS_DIR.each_child do |d|
+	username = d.basename.to_s
+	next if IGNORE_USERS.include? username
+	users.push d	
 end
 
-puts "Found the following students home folders:"
-puts found
-print "Delete users (y/n)? "
+puts "Found the following user home folders:"
+puts users
+print "Delete users (y/n)?"
 
 confirm = gets.chomp!
 
 if confirm.downcase == "y"
 	puts "Okay!"
-	found.each do |u|
+	users.each do |u|
 		user = u.basename
 		puts "Deleting user #{user}"
 		`dscl . -delete /Users/#{user}`
@@ -43,8 +42,7 @@ if confirm.downcase == "y"
 		FileUtils.rm_rf u
 	end
 else 
-	puts "Then why bother running me?"
-	exit 
+	puts "Skipping user deletion, for some reason..."
 end
 
 puts "Making new user #{new_username}, aka #{new_fullname}, with password #{new_password}"

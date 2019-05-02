@@ -7,9 +7,10 @@ PAYLOAD_DIR=$INSTALL_DIR/payload/usr/local
 mkdir -p $PAYLOAD_DIR
 
 cp device-reassign $PAYLOAD_DIR/
-sed -i '.plist' 's/com.github.munki/org.mirman/' $INSTALL_DIR/build-info.plist
-sed -i '.plist' "s/<string>1.0/<string>$(cat version)/" $INSTALL_DIR/build-info.plist
 cd $INSTALL_DIR
+sed -i ".plist" "s/com.github.munki/org.mirman/" build-info.plist
+sed -i ".plist" "s/<string>1.0/<string>$(cat version)/" build-info.plist
+sed -i ".plist" "s/\${version}/$(cat version)/" build-info.plist
 munkipkg ./
 cd ..
 exit 0

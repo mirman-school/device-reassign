@@ -1,0 +1,15 @@
+#!/bin/bash
+
+munkipkg --create device-reassign-install
+
+PAYLOAD_DIR=./device-reassign-install/payload/usr/local
+
+mkdir -p $PAYLOAD_DIR
+
+cp device-reassign $PAYLOAD_DIR/
+cd device-reassign
+sed -i '.plist' 's/com.github.munki/org.mirman/' build-info.plist
+sed -i '.plist' "s/<string>1.0/<string>$(cat version)/" build-info.plist
+munkipkg ./
+cd ..
+exit 0

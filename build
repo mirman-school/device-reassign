@@ -3,7 +3,7 @@
 munkipkg --create device-reassign-install
 
 INSTALL_DIR=device-reassign-install
-PAYLOAD_DIR=$PAYLOAD_DIR/payload/usr/local
+PAYLOAD_DIR=$INSTALL_DIR/payload/usr/local
 mkdir -p $PAYLOAD_DIR
 
 cp device-reassign $PAYLOAD_DIR/

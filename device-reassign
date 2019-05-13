@@ -9,12 +9,13 @@ IGNORE_USERS = ["electron","Shared"]
 new_username = ARGV.shift
 new_fullname = ARGV.shift
 new_password = ARGV.shift
+new_client_identifier = ARGV.shift
 
 def print_usage()
-	puts "Usage:\n device-reassign [NEW_USER] [FULLNAME] [PASSWORD]"
+	puts "Usage:\n device-reassign [NEW_USER] [FULLNAME] [PASSWORD] [CLIENTIDENTIFIER}"
 end
 
-if new_username == nil || new_fullname == nil || new_password == nil
+if new_username == nil || new_fullname == nil || new_password == nil || new_client_identifier == nil
 	print_usage()
 	exit 
 end
@@ -45,7 +46,10 @@ else
 	puts "Skipping user deletion, for some reason..."
 end
 
-puts "Making new user #{new_username}, aka #{new_fullname}, with password #{new_password}"
+puts "Making new user #{new_username}"
+puts "aka #{new_fullname}" 
+puts "password #{new_password}"
+puts "ClientIdentifier #{new_client_identifier}"
 
 print "Good to go (y/n)?"
 confirm = gets.chomp!
@@ -64,6 +68,7 @@ if confirm.downcase == "y"
 	`scutil --set HostName #{new_username}`
 	`scutil --set LocalHostName #{new_username}`
 	`scutil --set ComputerName #{new_username}`
+	`defaults write /Library/Preferences/ManagedInstalls ClientIdentifier #{new_client_identifier}`
 	puts "Device reprovisioned; update in all inventories"
 	exit
 else 

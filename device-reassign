@@ -3,6 +3,7 @@ require "pathname"
 require "fileutils"
 require "shellwords"
 
+WIFI_INT = "en0"
 USERS_DIR = Pathname.new("/Users")
 IGNORE_USERS = ["electron","Shared"]
 
@@ -83,8 +84,10 @@ if confirm.downcase == "y"
 	ssid = gets.chomp!
 	puts "Enter Wi-FI password:"
 	psk = gets.chomp!
-	`networksetup -removedallpreferredwirelessnetworks Wi-Fi`
-	`networksetup -addpreferredwirelessnetworkatindex Wi-Fi #{ssid} 0 wpa2 #{psk}`
+	`networksetup -setairportpower #{WIFI_INT} off`
+	`networksetup -removeallpreferredwirelessnetworks #{WIFI_INT}`
+	`networksetup -addpreferredwirelessnetworkatindex #{WIFI_INT} "#{ssid}" 0 wpa2 #{psk}`
+	`networksetup -setairportpower #{WIFI_INT} on`
 end
 puts "Okay, all set!"
 exit

@@ -75,3 +75,17 @@ else
 	puts "Fine, be that way"
 	exit 
 end
+
+puts "Change Wi-FI SSID? (y/n)"
+confirm = gets.chomp!
+
+if confirm.downcase == "y"
+	puts "Enter new Wi-FI SSID:"
+	ssid = gets.chomp!
+	puts "Enter Wi-FI password:"
+	psk = gets.chomp!
+	`networksetup -removedallpreferredwirelessnetworks Wi-Fi`
+	`networksetup -addpreferredwirelessnetworkatindex Wi-Fi #{ssid} 0 wpa2 #{psk}`
+end
+puts "Okay, all set!"
+exit

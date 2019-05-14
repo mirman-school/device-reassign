@@ -70,7 +70,6 @@ if confirm.downcase == "y"
 	`scutil --set ComputerName #{new_username}`
 	`defaults write /Library/Preferences/ManagedInstalls ClientIdentifier #{new_client_identifier}`
 	puts "Device reprovisioned; update in all inventories"
-	exit
 else 
 	puts "Fine, be that way"
 	exit 

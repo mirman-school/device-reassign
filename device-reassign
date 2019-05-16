@@ -70,6 +70,9 @@ if confirm.downcase == "y"
 	`scutil --set LocalHostName #{new_username}`
 	`scutil --set ComputerName #{new_username}`
 	`defaults write /Library/Preferences/ManagedInstalls ClientIdentifier #{new_client_identifier}`
+	
+	# Remove configure-dock receipt, forcing a reinstall for new user
+	`pkgutil --forget org.mirman.pkg.configure-dock-install`
 	puts "Device reprovisioned; update in all inventories"
 else 
 	puts "Fine, be that way"
